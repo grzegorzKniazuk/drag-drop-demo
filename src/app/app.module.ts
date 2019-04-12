@@ -3,16 +3,22 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import 'hammerjs';
+import { MaterialModule } from 'src/app/material.module';
+import { DashboardModule } from 'src/app/dashboard/dashboard.module';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+    ],
+    imports: [
+        BrowserModule,
+        MaterialModule,
+        AppRoutingModule,
+        DashboardModule,
+    ],
+    providers: [],
+    bootstrap: [ AppComponent ],
 })
-export class AppModule { }
+export class AppModule {
+}

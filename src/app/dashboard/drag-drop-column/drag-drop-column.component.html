@@ -1,0 +1,21 @@
+<div class="drag-drop-column">
+    <mat-icon (click)="deleteSection()">clear</mat-icon>
+    <mat-form-field>
+        <mat-label>Nazwa sekcji</mat-label>
+        <input matInput type="text" placeholder="Nazwa sekcji">
+    </mat-form-field>
+
+    <div
+        cdkDropList
+        [cdkDropListData]="dragListElements"
+        class="box-list"
+        (cdkDropListDropped)="onDrop($event)">
+        <div class="no-elements" *ngIf="!dragListElements.length; else dragElementsList">
+            <span>brak</span>
+            <span>elementów</span>
+        </div>
+        <ng-template #dragElementsList>
+            <app-thumbnail-slide *ngFor="let element of dragListElements" [thumbnailSrc]="element"></app-thumbnail-slide>
+        </ng-template>
+    </div>
+</div>

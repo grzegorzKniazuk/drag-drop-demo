@@ -1,0 +1,11 @@
+<div class="items-store">
+    <label>
+        <input type="file" (change)="takePicture($event)" #fileUploaderInput>
+    </label>
+    <div
+        #storeItems
+        cdkDropList
+        [cdkDropListData]="filesInStore"
+        (cdkDropListDropped)="onDrop($event)">
+    </div>
+</div>

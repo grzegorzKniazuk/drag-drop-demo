@@ -1,0 +1,17 @@
+.form-control {
+	&.ng-invalid.ng-touched {
+		border: 2px solid $danger;
+	}
+
+	&.ng-valid.ng-touched {
+		border: 2px solid $primary;
+	}
+
+	&.ng-valid.success {
+		border: 2px solid $success;
+	}
+}
+
+.nav-tabs .nav-item {
+	margin-bottom: -4px;
+}
