@@ -32,7 +32,7 @@ export class UserElementsLibaryFactoryDirective implements OnInit {
 
     private watchRemoveElementFromUserLibary() {
         this.userElementsLibaryService.onRemoveElementToUserLibary$.subscribe((id: number) => {
-            this.viewConainerRef.remove(id);
+            this.viewConainerRef.remove(id - 1);
         });
     }
 }
