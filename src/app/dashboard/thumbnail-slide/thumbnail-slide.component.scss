@@ -1,8 +1,0 @@
-@import "./src/assets/styles/base.scss";
-
-.box {
-    @include flex(flex, center, center, column);
-    @include size(150px, 150px);
-    box-sizing: border-box;
-    margin-bottom: 10px;
-}

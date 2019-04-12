@@ -1,0 +1,17 @@
+@import "./src/assets/styles/base.scss";
+
+div {
+    position: relative;
+
+    img {
+        @include size(200px, 200px);
+        margin-top: 15px;
+    }
+
+    mat-icon {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+    }
+}
+

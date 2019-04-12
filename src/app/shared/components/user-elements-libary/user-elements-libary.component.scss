@@ -1,0 +1,10 @@
+@import "./src/assets/styles/base.scss";
+
+.user-elements-libary-container {
+    @include flex(flex, flex-start, center, column, relative);
+    @include size(250px, 100%);
+    min-height: 100vh;
+    min-width: 300px;
+    box-sizing: border-box;
+    border-right: 2px dashed black;
+}

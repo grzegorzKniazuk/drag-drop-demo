@@ -1,8 +1,0 @@
-@import "./src/assets/styles/base.scss";
-
-.items-store {
-    @include flex(flex, flex-start, center, column);
-    @include size(250px, 100vh);
-    background: aquamarine;
-    margin-right: 15px;
-}
