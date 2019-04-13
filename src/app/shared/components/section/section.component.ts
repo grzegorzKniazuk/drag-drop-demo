@@ -2,16 +2,18 @@ import {
     Component,
     ComponentFactory,
     ComponentFactoryResolver,
-    ComponentRef, EventEmitter,
+    ComponentRef,
+    EventEmitter,
     Input,
     OnInit,
-    Output,
     ViewChild,
-    ViewContainerRef,
+    ViewContainerRef, ViewRef,
 } from '@angular/core';
 import { ThumbnailSlideComponent } from 'src/app/shared/components/thumbnail-slide/thumbnail-slide.component';
 import * as uuid from '../../../../../node_modules/uuid';
 import { ActionsService } from 'src/app/shared/services/actions.service';
+import { take } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
 
 @Component({
     selector: 'app-section',
@@ -24,7 +26,6 @@ export class SectionComponent implements OnInit {
     @Input() private id = uuid();
     public columnID: number;
     public onRemoveSection$: EventEmitter<number> = new EventEmitter<number>();
-
 
     private thumbnailSlideComponentFactory: ComponentFactory<ThumbnailSlideComponent> = this.componentFactoryResolver.resolveComponentFactory(ThumbnailSlideComponent);
     private thumbnailSlideComponentRef: ComponentRef<ThumbnailSlideComponent>;
@@ -56,10 +57,14 @@ export class SectionComponent implements OnInit {
         this.insert(data);
     }
 
-    public insert(data: { id: string, buffer: string | ArrayBuffer}): void {
+    public insert(data: { id: string, buffer: string | ArrayBuffer }): void {
         const isComponentAlreadyInSection = this.thumbnailSlideList.find((thumbnail: ThumbnailSlideComponent) => {
             return thumbnail.buffer === data.buffer;
         });
+
+        if (isComponentAlreadyInSection && this.thumbnailSlideList.length > 1) {
+            this.sortElementsInColumn();
+        }
 
         if (!isComponentAlreadyInSection) {
             this.thumbnailSlideComponentRef = this.thumbnailDropZone.createComponent(this.thumbnailSlideComponentFactory);
@@ -68,6 +73,18 @@ export class SectionComponent implements OnInit {
             this.thumbnailSlideComponentRef.instance.buffer = data.buffer;
             this.thumbnailSlideList.push(this.thumbnailSlideComponentRef.instance);
         }
+    }
+
+    private sortElementsInColumn(): void {
+        combineLatest(
+            this.actionsService.onDragStart$,
+            this.actionsService.onDragEnter$,
+        ).pipe(
+            take(1)
+        ).subscribe(([ source, target ]: { slideID: string, idInColumn: number }[]) => {
+            const componentToMove: ViewRef = this.thumbnailDropZone.get(source.idInColumn);
+            this.thumbnailDropZone.move(componentToMove, target.idInColumn);
+        });
     }
 
     public allowDrop(event: DragEvent): void {

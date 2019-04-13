@@ -1,4 +1,4 @@
-<div draggable="true" (dragstart)="dragStart($event)">
+<div draggable="true" (dragstart)="dragStart($event)" (dragenter)="dragEnter()">
     <img [src]="buffer" [alt]="">
     <mat-icon (click)="removeSlide()">clear</mat-icon>
 </div>
