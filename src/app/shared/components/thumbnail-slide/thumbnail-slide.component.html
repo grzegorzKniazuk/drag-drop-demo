@@ -1,4 +1,5 @@
 <div draggable="true" (dragstart)="dragStart($event)" (dragenter)="dragEnter()">
     <img [src]="buffer" [alt]="">
+    <mat-icon (click)="editSlide()">border_color</mat-icon>
     <mat-icon (click)="removeSlide()">clear</mat-icon>
 </div>

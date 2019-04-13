@@ -1,0 +1,12 @@
+<div class="canvas-container">
+    <canvas width="800"
+            height="800"
+            #canvasElement
+            (click)="click($event)"
+            (mousedown)="mouseDown($event)"
+            (mouseup)="mouseUp($event)"
+            (mousemove)="mouseMove($event)"></canvas>
+    <a [href]="save()" target="_blank">
+        <button mat-raised-button color="primary">Pokaż podląd PNG</button>
+    </a>
+</div>

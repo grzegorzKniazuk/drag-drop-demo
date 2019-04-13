@@ -10,8 +10,15 @@ div {
 
     mat-icon {
         position: absolute;
-        top: 15px;
-        right: -20px;
+        z-index: 1;
+        &:first-of-type {
+            top: 15px;
+            right: -30px;
+        }
+        &:last-of-type {
+            top: 45px;
+            right: -30px;
+        }
     }
 }
 

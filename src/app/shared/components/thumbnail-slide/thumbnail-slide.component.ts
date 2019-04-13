@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActionsService } from 'src/app/shared/services/actions.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-thumbnail-slide',
@@ -14,6 +15,7 @@ export class ThumbnailSlideComponent implements OnInit {
 
     constructor(
         private actionsService: ActionsService,
+        private router: Router,
     ) {
     }
 
@@ -27,6 +29,11 @@ export class ThumbnailSlideComponent implements OnInit {
 
     public removeSlide(): void {
         this.actionsService.onRemoveSlide$.next({ slideID: this.id, idInColumn: this.idInColumn });
+    }
+
+    public editSlide(): void {
+        this.actionsService.onEditSlide$.next({ slideID: this.id, buffer: this.buffer });
+        this.router.navigate(['dashboard', this.id, 'edit']).catch(e => console.log(e));
     }
 
     public dragEnter(): void {
