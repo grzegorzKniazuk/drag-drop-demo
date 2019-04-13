@@ -3,24 +3,18 @@
 .dashboard-container {
     @include flex(flex, flex-start, flex-start, row);
     @include size(100%, 100%);
-
-    .column {
-        @include flex(flex, flex-start, center, column);
-        @include size(300px, 80%);
-        border: 1px dotted black;
-        border-radius: 5px;
-        box-sizing: border-box;
-        margin-left: 15px;
-
-        img {
-            @include size(200px, 200px);
-            margin-top: 15px;
-        }
-    }
+    padding: 15px;
+    box-sizing: border-box;
 }
 
 input[type="file"] {
     position: absolute;
-    top: 15px;
-    right: 5px;
+    bottom: 15px;
+    left: 140px;
+}
+
+button {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
 }

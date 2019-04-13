@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
     selector: 'app-thumbnail-slide',
@@ -7,8 +7,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class ThumbnailSlideComponent implements OnInit {
 
-    @Output() public onRemoveSlide$: EventEmitter<number> = new EventEmitter<number>();
-    @Input() public id: number;
+    @Input() public id: string;
+    @Input() public idInColumn: number;
     @Input() public buffer: string | ArrayBuffer;
 
     constructor() {
@@ -18,10 +18,10 @@ export class ThumbnailSlideComponent implements OnInit {
     }
 
     public dragStart(event: any): void {
-        event.dataTransfer.setData('string', String(this.id));
+        event.dataTransfer.setData('string', JSON.stringify({ id: this.id, idInColumn: this.idInColumn, buffer: this.buffer }));
     }
 
     public removeSlide(): void {
-        this.onRemoveSlide$.emit(this.id);
+
     }
 }

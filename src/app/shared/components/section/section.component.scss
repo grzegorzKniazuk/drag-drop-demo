@@ -1,0 +1,16 @@
+@import "./src/assets/styles/base.scss";
+
+.column {
+    @include flex(flex, flex-start, center, column);
+    @include size(300px, 100%);
+    min-height: 80vh;
+    border: 1px dotted black;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin-right: 15px;
+
+    img {
+        @include size(200px, 200px);
+        margin-top: 15px;
+    }
+}
