@@ -1,5 +1,4 @@
-<div cdkDrag>
-    <img [src]="element.data" [alt]="element.name">
+<div draggable="true" (dragstart)="dragStart($event)">
+    <img [src]="buffer" [alt]="">
     <mat-icon (click)="removeSlide()">clear</mat-icon>
 </div>
-

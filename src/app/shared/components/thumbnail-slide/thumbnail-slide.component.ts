@@ -1,8 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ImageFile } from 'src/app/shared/interfaces/image-file';
-import { AppState } from 'src/app/store/reducers/base.reducer';
-import { Store } from '@ngrx/store';
-import { RemoveElementFromUserLibary } from 'src/app/store/actions/user-elements-libary.actions';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
     selector: 'app-thumbnail-slide',
@@ -11,15 +7,21 @@ import { RemoveElementFromUserLibary } from 'src/app/store/actions/user-elements
 })
 export class ThumbnailSlideComponent implements OnInit {
 
-    @Input() public element: ImageFile;
+    @Output() public onRemoveSlide$: EventEmitter<number> = new EventEmitter<number>();
+    @Input() public id: number;
+    @Input() public buffer: string | ArrayBuffer;
 
-    constructor(private store: Store<AppState>) {
+    constructor() {
     }
 
     ngOnInit() {
     }
 
+    public dragStart(event: any): void {
+        event.dataTransfer.setData('string', String(this.id));
+    }
+
     public removeSlide(): void {
-        this.store.dispatch(new RemoveElementFromUserLibary({ id: this.element.id }));
+        this.onRemoveSlide$.emit(this.id);
     }
 }
