@@ -4,10 +4,12 @@ import {
     ComponentFactoryResolver,
     ComponentRef,
     EventEmitter,
-    Input, OnDestroy,
+    Input,
+    OnDestroy,
     OnInit,
     ViewChild,
-    ViewContainerRef, ViewRef,
+    ViewContainerRef,
+    ViewRef,
 } from '@angular/core';
 import { ThumbnailSlideComponent } from 'src/app/shared/components/thumbnail-slide/thumbnail-slide.component';
 import * as uuid from '../../../../../node_modules/uuid';
@@ -41,7 +43,7 @@ export class SectionComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.actionsService.onDropID$.pipe(
-            filter((v) => !!v)
+            filter((v) => !!v),
         ).subscribe((data: { sectionID: string, slideID: string, idInColumn: number }) => {
             const filteredThumbnailSlideList = this.thumbnailSlideList.find((slide: ThumbnailSlideComponent) => {
                 return slide.id === data.slideID;
@@ -54,7 +56,7 @@ export class SectionComponent implements OnInit, OnDestroy {
             }
         });
         this.actionsService.onRemoveSlide$.pipe(
-            filter((v) => !!v)
+            filter((v) => !!v),
         ).subscribe(({ slideID, idInColumn }: { slideID: string, idInColumn: number }) => {
             const isComponentAlreadyInSection = this.thumbnailSlideList.find((thumbnail: ThumbnailSlideComponent) => {
                 return thumbnail.id === slideID;
@@ -101,9 +103,20 @@ export class SectionComponent implements OnInit, OnDestroy {
             this.actionsService.onDragStart$,
             this.actionsService.onDragEnter$,
         ).pipe(
-            take(1)
+            take(1),
         ).subscribe(([ source, target ]: { slideID: string, idInColumn: number }[]) => {
             const componentToMove: ViewRef = this.thumbnailDropZone.get(source.idInColumn);
+
+            const sourceIndexInArray = this.thumbnailSlideList.findIndex((component: ThumbnailSlideComponent) => {
+                return component.id === source.slideID;
+            });
+
+            const targetIndexInArray = this.thumbnailSlideList.findIndex((component: ThumbnailSlideComponent) => {
+                return component.id === target.slideID;
+            });
+
+            [ this.thumbnailSlideList[sourceIndexInArray], this.thumbnailSlideList[targetIndexInArray] ] = [ this.thumbnailSlideList[targetIndexInArray], this.thumbnailSlideList[sourceIndexInArray] ];
+
             this.thumbnailDropZone.move(componentToMove, target.idInColumn);
         });
     }
