@@ -12,6 +12,7 @@ import { environment } from 'src/environments/environment';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { baseReducers, metaReducers } from 'src/app/store/reducers/base.reducer';
 import { UserElementsLibaryEffects } from 'src/app/store/effects/user-elements-libary.effects';
+import { PresentationColumnsEffects } from 'src/app/store/effects/presentation-columns.effects';
 
 @NgModule({
     declarations: [
@@ -23,7 +24,7 @@ import { UserElementsLibaryEffects } from 'src/app/store/effects/user-elements-l
         AppRoutingModule,
         DashboardModule,
         StoreModule.forRoot(baseReducers, { metaReducers }),
-        EffectsModule.forRoot([ UserElementsLibaryEffects ]),
+        EffectsModule.forRoot([ UserElementsLibaryEffects, PresentationColumnsEffects ]),
         !environment.production ? StoreDevtoolsModule.instrument() : [],
     ],
     providers: [],

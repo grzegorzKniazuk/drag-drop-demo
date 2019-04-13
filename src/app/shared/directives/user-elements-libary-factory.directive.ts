@@ -23,14 +23,14 @@ export class UserElementsLibaryFactoryDirective implements OnInit {
         this.watchRemoveElementFromUserLibary();
     }
 
-    private watchOnAddElementToUserLibary() {
+    private watchOnAddElementToUserLibary(): void {
         this.userElementsLibaryService.onAddElementToUserLibary$.subscribe((element: ImageFile) => {
             this.thumbnailSlideComponentRef = this.viewConainerRef.createComponent(this.thumbnailSlideComponentFactory);
             this.thumbnailSlideComponentRef.instance.element = element;
         });
     }
 
-    private watchRemoveElementFromUserLibary() {
+    private watchRemoveElementFromUserLibary(): void {
         this.userElementsLibaryService.onRemoveElementToUserLibary$.subscribe((id: number) => {
             this.viewConainerRef.remove(id - 1);
         });

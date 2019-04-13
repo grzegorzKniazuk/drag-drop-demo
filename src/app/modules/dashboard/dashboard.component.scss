@@ -4,3 +4,9 @@
     @include flex(flex, flex-start, flex-start, row);
     @include size(100%, 100%);
 }
+
+button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}

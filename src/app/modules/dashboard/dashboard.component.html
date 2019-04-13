@@ -1,5 +1,5 @@
-<div class="dashboard-container" >
-    <app-user-elements-libary></app-user-elements-libary>
+<div class="dashboard-container" cdkDropListGroup>
+    <app-user-elements-libary cdkDropList></app-user-elements-libary>
     <ng-container appPresentationColumnFactory></ng-container>
-    <app-presentation-column cdkDropList></app-presentation-column>
 </div>
+<button mat-raised-button color="primary" (click)="addColumn()">Dodaj kolumnę</button>
