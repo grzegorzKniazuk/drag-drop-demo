@@ -4,7 +4,7 @@ import {
     ComponentFactoryResolver,
     ComponentRef,
     EventEmitter,
-    Input,
+    Input, OnDestroy,
     OnInit,
     ViewChild,
     ViewContainerRef, ViewRef,
@@ -12,15 +12,17 @@ import {
 import { ThumbnailSlideComponent } from 'src/app/shared/components/thumbnail-slide/thumbnail-slide.component';
 import * as uuid from '../../../../../node_modules/uuid';
 import { ActionsService } from 'src/app/shared/services/actions.service';
-import { take } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
+@AutoUnsubscribe()
 @Component({
     selector: 'app-section',
     templateUrl: './section.component.html',
     styleUrls: [ './section.component.scss' ],
 })
-export class SectionComponent implements OnInit {
+export class SectionComponent implements OnInit, OnDestroy {
 
     @ViewChild('thumbnailDropZone', { read: ViewContainerRef }) public thumbnailDropZone: ViewContainerRef;
     @Input() private id = uuid();
@@ -38,7 +40,9 @@ export class SectionComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.actionsService.onDropID$.subscribe((data: { sectionID: string, slideID: string, idInColumn: number }) => {
+        this.actionsService.onDropID$.pipe(
+            filter((v) => !!v)
+        ).subscribe((data: { sectionID: string, slideID: string, idInColumn: number }) => {
             const filteredThumbnailSlideList = this.thumbnailSlideList.find((slide: ThumbnailSlideComponent) => {
                 return slide.id === data.slideID;
             });
@@ -49,6 +53,23 @@ export class SectionComponent implements OnInit {
                 this.thumbnailDropZone.remove(data.idInColumn);
             }
         });
+        this.actionsService.onRemoveSlide$.pipe(
+            filter((v) => !!v)
+        ).subscribe(({ slideID, idInColumn }: { slideID: string, idInColumn: number }) => {
+            const isComponentAlreadyInSection = this.thumbnailSlideList.find((thumbnail: ThumbnailSlideComponent) => {
+                return thumbnail.id === slideID;
+            });
+
+            if (isComponentAlreadyInSection) {
+                this.thumbnailSlideList = this.thumbnailSlideList.filter((thumbnail: ThumbnailSlideComponent) => {
+                    return thumbnail.id !== slideID;
+                });
+                this.thumbnailDropZone.remove(idInColumn);
+            }
+        });
+    }
+
+    public ngOnDestroy(): void {
     }
 
     public drop(event: DragEvent): void {

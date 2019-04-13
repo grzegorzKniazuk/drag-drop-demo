@@ -26,7 +26,7 @@ export class ThumbnailSlideComponent implements OnInit {
     }
 
     public removeSlide(): void {
-
+        this.actionsService.onRemoveSlide$.next({ slideID: this.id, idInColumn: this.idInColumn });
     }
 
     public dragEnter(): void {
