@@ -52,6 +52,7 @@ export class SectionComponent implements OnInit, OnDestroy {
                     return slide.id !== data.slideID;
                 });
                 this.thumbnailDropZone.remove(data.idInColumn);
+                this.recalculateIdInColumnForElements();
             }
         });
         this.actionsService.onRemoveSlide$.pipe(
@@ -66,11 +67,23 @@ export class SectionComponent implements OnInit, OnDestroy {
                     return thumbnail.id !== slideID;
                 });
                 this.thumbnailDropZone.remove(idInColumn);
+                this.recalculateIdInColumnForElements();
             }
         });
     }
 
     public ngOnDestroy(): void {
+    }
+
+    private recalculateIdInColumnForElements() : void {
+        if (this.thumbnailDropZone.length) {
+            for (let i = 0; i < this.thumbnailDropZone.length; i++) {
+                this.thumbnailSlideList[i].idInColumn = i;
+                this.actionsService.onRealculateSlidesIDs$.next({ slideID: this.thumbnailSlideList[i].id, idInColumn: i });
+            }
+        } else {
+
+        }
     }
 
     public drop(event: DragEvent): void {
@@ -84,16 +97,16 @@ export class SectionComponent implements OnInit, OnDestroy {
             return thumbnail.id === data.id;
         });
 
-        if (isComponentAlreadyInSection && this.thumbnailSlideList.length > 1) {
-            this.sortElementsInColumn();
-        }
-
         if (!isComponentAlreadyInSection) {
             this.thumbnailSlideComponentRef = this.thumbnailDropZone.createComponent(this.thumbnailSlideComponentFactory);
             this.thumbnailSlideComponentRef.instance.id = data.id;
             this.thumbnailSlideComponentRef.instance.idInColumn = this.thumbnailDropZone.length - 1;
             this.thumbnailSlideComponentRef.instance.buffer = data.buffer;
             this.thumbnailSlideList.push(this.thumbnailSlideComponentRef.instance);
+
+            this.recalculateIdInColumnForElements();
+        } else if (isComponentAlreadyInSection && this.thumbnailSlideList.length > 1) {
+            this.sortElementsInColumn();
         }
     }
 
@@ -112,9 +125,9 @@ export class SectionComponent implements OnInit, OnDestroy {
         ).pipe(
             take(1),
         ).subscribe(([ source, target ]: { slideID: string, idInColumn: number }[]) => {
-            console.log(source.idInColumn);
-            console.log(target.idInColumn);
-            const componentToMove: ViewRef = this.thumbnailDropZone.get(source.idInColumn);
+
+            const componentSourceViewRef: ViewRef = this.thumbnailDropZone.get(source.idInColumn);
+            const componentTargetViewRef: ViewRef = this.thumbnailDropZone.get(target.idInColumn);
 
             const sourceIndexInArray = this.thumbnailSlideList.findIndex((component: ThumbnailSlideComponent) => {
                 return component.id === source.slideID;
@@ -124,12 +137,10 @@ export class SectionComponent implements OnInit, OnDestroy {
                 return component.id === target.slideID;
             });
 
-            // console.log('sourceIndexInArray: '+sourceIndexInArray);
-            // console.log('targetIndexInArray: '+targetIndexInArray);
+            [ this.thumbnailSlideList[sourceIndexInArray].idInColumn, this.thumbnailSlideList[targetIndexInArray].idInColumn ] = [ this.thumbnailSlideList[targetIndexInArray].idInColumn, this.thumbnailSlideList[sourceIndexInArray].idInColumn ];
 
-            [ this.thumbnailSlideList[sourceIndexInArray], this.thumbnailSlideList[targetIndexInArray] ] = [ this.thumbnailSlideList[targetIndexInArray], this.thumbnailSlideList[sourceIndexInArray] ];
-
-            this.thumbnailDropZone.move(componentToMove, target.idInColumn);
+            this.thumbnailDropZone.move(componentSourceViewRef, target.idInColumn);
+            this.thumbnailDropZone.move(componentTargetViewRef, source.idInColumn);
         });
     }
 }

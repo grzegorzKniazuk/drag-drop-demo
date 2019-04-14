@@ -1,6 +1,6 @@
-<div (dragenter)="dragEnter()" (dragstart)="dragStart($event)" draggable="true">
+<div (dragenter)="dragEnter()" (dragstart)="dragStart($event)" draggable="true" (mouseenter)="mouseEnter()" (mouseleave)="mouseLeave()">
     <div class="id-in-column">{{ idInColumn }}</div>
     <img [alt]="" [src]="buffer">
-    <mat-icon (click)="editSlide()">border_color</mat-icon>
-    <mat-icon (click)="removeSlide()">clear</mat-icon>
+    <mat-icon *ngIf="onMouseEnter" (click)="editSlide()">border_color</mat-icon>
+    <mat-icon *ngIf="onMouseEnter" (click)="removeSlide()">clear</mat-icon>
 </div>

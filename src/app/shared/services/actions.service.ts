@@ -10,4 +10,5 @@ export class ActionsService {
     public readonly onDragEnter$: BehaviorSubject<{ slideID: string, idInColumn: number }> = new BehaviorSubject<{ slideID: string, idInColumn: number }>(null);
     public readonly onRemoveSlide$: BehaviorSubject<{ slideID: string, idInColumn: number }> = new BehaviorSubject<{ slideID: string, idInColumn: number }>(null);
     public readonly onEditSlide$: BehaviorSubject<{ slideID: string, buffer: string | ArrayBuffer }> = new BehaviorSubject<{ slideID: string, buffer: string | ArrayBuffer }>(null);
+    public readonly onRealculateSlidesIDs$: BehaviorSubject<{ slideID: string, idInColumn: number }> = new BehaviorSubject<{ slideID: string, idInColumn: number }>(null);
 }

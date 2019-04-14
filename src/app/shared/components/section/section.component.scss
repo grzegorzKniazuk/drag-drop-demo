@@ -3,7 +3,7 @@
 .column {
     @include flex(flex, flex-start, center, column);
     @include size(300px, 100%);
-    min-height: 80vh;
+    min-height: 200px;
     border-radius: 5px;
     box-sizing: border-box;
     margin-right: 15px;
@@ -20,4 +20,9 @@
         @include size(200px, 200px);
         margin-top: 15px;
     }
+}
+
+button {
+    margin-top: 15px;
+    margin-left: 100px;
 }

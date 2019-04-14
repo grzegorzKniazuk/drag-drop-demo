@@ -24,15 +24,17 @@ div {
     mat-icon {
         position: absolute;
         z-index: 1;
+        cursor: pointer;
+        color: $white;
 
         &:first-of-type {
-            top: 15px;
-            right: -30px;
+            top: 20px;
+            right: 5px;
         }
 
         &:last-of-type {
-            top: 45px;
-            right: -30px;
+            top: 50px;
+            right: 5px;
         }
     }
 }

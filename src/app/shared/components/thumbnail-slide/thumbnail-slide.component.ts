@@ -1,17 +1,21 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActionsService } from 'src/app/shared/services/actions.service';
 import { Router } from '@angular/router';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { filter } from 'rxjs/operators';
 
+@AutoUnsubscribe()
 @Component({
     selector: 'app-thumbnail-slide',
     templateUrl: './thumbnail-slide.component.html',
     styleUrls: [ './thumbnail-slide.component.scss' ],
 })
-export class ThumbnailSlideComponent implements OnChanges {
+export class ThumbnailSlideComponent implements OnInit, OnDestroy {
 
-    @Input() public id: string;
-    @Input() public idInColumn: number;
-    @Input() public buffer: string | ArrayBuffer;
+    public id: string;
+    public idInColumn: number;
+    public buffer: string | ArrayBuffer;
+    public onMouseEnter: boolean;
 
     constructor(
         private actionsService: ActionsService,
@@ -19,8 +23,15 @@ export class ThumbnailSlideComponent implements OnChanges {
     ) {
     }
 
-    public ngOnChanges(changes: SimpleChanges): void {
-        console.log(changes);
+    public ngOnInit(): void {
+        this.actionsService.onRealculateSlidesIDs$.pipe(
+            filter((data: { slideID: string, idInColumn: number }) => data && data.slideID === this.id),
+        ).subscribe((data: { slideID: string, idInColumn: number }) => {
+            this.idInColumn = data.idInColumn;
+        });
+    }
+
+    public ngOnDestroy(): void {
     }
 
     public dragStart(event: any): void {
@@ -39,5 +50,13 @@ export class ThumbnailSlideComponent implements OnChanges {
 
     public dragEnter(): void {
         this.actionsService.onDragEnter$.next({ slideID: this.id, idInColumn: this.idInColumn });
+    }
+
+    public mouseEnter(): void {
+        this.onMouseEnter = true;
+    }
+
+    public mouseLeave(): void {
+        this.onMouseEnter = false;
     }
 }
