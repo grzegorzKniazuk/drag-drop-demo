@@ -1,5 +1,8 @@
 
 <div class="column" (drop)="drop($event)" (dragover)="allowDrop($event)">
+    <mat-form-field>
+        <input matInput type="text" placeholder="Nazwa sekcji">
+    </mat-form-field>
     <div class="thumnail-container">
         <ng-container #thumbnailDropZone></ng-container>
     </div>

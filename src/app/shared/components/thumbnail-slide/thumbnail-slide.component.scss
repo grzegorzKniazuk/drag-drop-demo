@@ -3,6 +3,19 @@
 div {
     position: relative;
 
+    .id-in-column {
+        position: absolute;
+        top: 15px;
+        border-left: 1px solid black;
+        border-top: 1px solid black;
+        box-sizing: border-box;
+        left: 0;
+        text-align: center;
+        @include size(30px, 30px);
+        background: $white;
+        padding: 5px;
+    }
+
     img {
         @include size(225px);
         margin-top: 15px;

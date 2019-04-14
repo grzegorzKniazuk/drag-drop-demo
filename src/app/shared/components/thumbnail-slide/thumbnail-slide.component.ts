@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ActionsService } from 'src/app/shared/services/actions.service';
 import { Router } from '@angular/router';
 
@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
     templateUrl: './thumbnail-slide.component.html',
     styleUrls: [ './thumbnail-slide.component.scss' ],
 })
-export class ThumbnailSlideComponent implements OnInit {
+export class ThumbnailSlideComponent implements OnChanges {
 
     @Input() public id: string;
     @Input() public idInColumn: number;
@@ -19,7 +19,8 @@ export class ThumbnailSlideComponent implements OnInit {
     ) {
     }
 
-    ngOnInit() {
+    public ngOnChanges(changes: SimpleChanges): void {
+        console.log(changes);
     }
 
     public dragStart(event: any): void {
@@ -33,7 +34,7 @@ export class ThumbnailSlideComponent implements OnInit {
 
     public editSlide(): void {
         this.actionsService.onEditSlide$.next({ slideID: this.id, buffer: this.buffer });
-        this.router.navigate(['dashboard', this.id, 'edit']).catch(e => console.log(e));
+        this.router.navigate([ 'dashboard', this.id, 'edit' ]).catch(e => console.log(e));
     }
 
     public dragEnter(): void {
