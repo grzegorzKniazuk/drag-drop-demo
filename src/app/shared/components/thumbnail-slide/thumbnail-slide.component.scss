@@ -4,7 +4,7 @@ div {
     position: relative;
 
     img {
-        @include size(200px, 200px);
+        @include size(225px);
         margin-top: 15px;
     }
 

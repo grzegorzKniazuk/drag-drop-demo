@@ -14,7 +14,7 @@ import {
 import { ThumbnailSlideComponent } from 'src/app/shared/components/thumbnail-slide/thumbnail-slide.component';
 import * as uuid from '../../../../../node_modules/uuid';
 import { ActionsService } from 'src/app/shared/services/actions.service';
-import { filter, take } from 'rxjs/operators';
+import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
@@ -82,7 +82,7 @@ export class SectionComponent implements OnInit, OnDestroy {
 
     public insert(data: { id: string, buffer: string | ArrayBuffer }): void {
         const isComponentAlreadyInSection = this.thumbnailSlideList.find((thumbnail: ThumbnailSlideComponent) => {
-            return thumbnail.buffer === data.buffer;
+            return thumbnail.id === data.id;
         });
 
         if (isComponentAlreadyInSection && this.thumbnailSlideList.length > 1) {
@@ -103,8 +103,11 @@ export class SectionComponent implements OnInit, OnDestroy {
             this.actionsService.onDragStart$,
             this.actionsService.onDragEnter$,
         ).pipe(
-            take(1),
+            distinctUntilChanged(([ prevSource, prevTarget ]: { slideID: string, idInColumn: number }[], [ nextSource, nextTarget ]: { slideID: string, idInColumn: number }[]) => {
+                return prevTarget.idInColumn !== nextTarget.idInColumn;
+            }),
         ).subscribe(([ source, target ]: { slideID: string, idInColumn: number }[]) => {
+            console.log(source.slideID);
             const componentToMove: ViewRef = this.thumbnailDropZone.get(source.idInColumn);
 
             const sourceIndexInArray = this.thumbnailSlideList.findIndex((component: ThumbnailSlideComponent) => {
@@ -114,6 +117,9 @@ export class SectionComponent implements OnInit, OnDestroy {
             const targetIndexInArray = this.thumbnailSlideList.findIndex((component: ThumbnailSlideComponent) => {
                 return component.id === target.slideID;
             });
+
+            // console.log('sourceIndexInArray: '+sourceIndexInArray);
+            // console.log('targetIndexInArray: '+targetIndexInArray);
 
             [ this.thumbnailSlideList[sourceIndexInArray], this.thumbnailSlideList[targetIndexInArray] ] = [ this.thumbnailSlideList[targetIndexInArray], this.thumbnailSlideList[sourceIndexInArray] ];
 

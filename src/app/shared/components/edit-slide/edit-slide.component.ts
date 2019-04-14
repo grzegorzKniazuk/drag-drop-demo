@@ -45,11 +45,11 @@ export class EditSlideComponent implements AfterViewInit, OnDestroy {
     }
 
     private fillStyle(): void {
-        const background = new Image(800, 800);
+        const background = new Image(1280, 720);
         background.src = <string>this.buffer;
 
         background.onload = () => {
-            this.context.drawImage(background, 0, 0, 800, 800 * background.height / background.width);
+            this.context.drawImage(background, 0, 0, 1280, 1280 * background.height / background.width);
         };
     }
 
@@ -116,7 +116,7 @@ export class EditSlideComponent implements AfterViewInit, OnDestroy {
         this.context.stroke();
     }
 
-    private save(): void {
+    public save(): void {
         this.canvasComponent = {
             data: this.canvasElement.nativeElement.toDataURL('image/png'),
             rectangles: this.rectangles,
@@ -124,7 +124,7 @@ export class EditSlideComponent implements AfterViewInit, OnDestroy {
         return this.canvasElement.nativeElement.toDataURL('image/png');
     }
 
-    private click(event: MouseEvent): void {
+    public click(event: MouseEvent): void {
         const { x, y } = this.getCursorPosition(event);
 
         for (let i = 0; i < this.rectangles.length; i++) {

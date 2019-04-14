@@ -1,4 +1,7 @@
+
 <div class="column" (drop)="drop($event)" (dragover)="allowDrop($event)">
-    <ng-container #thumbnailDropZone></ng-container>
+    <div class="thumnail-container">
+        <ng-container #thumbnailDropZone></ng-container>
+    </div>
 </div>
 <button mat-raised-button color="warn" (click)="removeSection()" *ngIf="columnID >= 0">Usuń sekcję</button>

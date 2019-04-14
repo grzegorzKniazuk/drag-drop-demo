@@ -2,5 +2,7 @@
     <app-section></app-section>
     <ng-container #sectionContainer></ng-container>
 </div>
-<input type="file" (change)="uploadFile($event)">
+<div>
+    <input type="file" (change)="uploadFile($event)" multiple>
+</div>
 <button mat-raised-button color="primary" (click)="addSection()">Dodaj sekcję</button>
