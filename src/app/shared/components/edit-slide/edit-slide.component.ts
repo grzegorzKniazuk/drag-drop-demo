@@ -12,10 +12,10 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 })
 export class EditSlideComponent implements AfterViewInit, OnDestroy {
 
-    @ViewChild('canvasElement') private canvasElement: ElementRef;
-    private context: CanvasRenderingContext2D;
     public slideID: string;
     public buffer: string | ArrayBuffer;
+    @ViewChild('canvasElement') private canvasElement: ElementRef;
+    private context: CanvasRenderingContext2D;
     private startCords: { x: number, y: number };
     private endCords: { x: number, y: number };
     private readonly rectangles: Rectangle[] = [];
@@ -42,15 +42,6 @@ export class EditSlideComponent implements AfterViewInit, OnDestroy {
     }
 
     ngOnDestroy() {
-    }
-
-    private fillStyle(): void {
-        const background = new Image(1280, 720);
-        background.src = <string>this.buffer;
-
-        background.onload = () => {
-            this.context.drawImage(background, 0, 0, 1280, 1280 * background.height / background.width);
-        };
     }
 
     public mouseDown(event: MouseEvent): void {
@@ -89,14 +80,6 @@ export class EditSlideComponent implements AfterViewInit, OnDestroy {
         }
     }
 
-    private getCursorPosition(event: MouseEvent): { x: number, y: number } {
-        const rect = this.canvasElement.nativeElement.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
-
-        return { x, y };
-    }
-
     public mouseMove(event: MouseEvent): void {
         if (this.startCords && this.endCords) {
             this.context.clearRect(this.startCords.x, this.startCords.y, this.endCords.x - this.startCords.x, this.endCords.y - this.startCords.y);
@@ -105,15 +88,6 @@ export class EditSlideComponent implements AfterViewInit, OnDestroy {
             this.endCords = this.getCursorPosition(event);
             this.drawRectangle();
         }
-    }
-
-    private drawRectangle(): void {
-        this.context.beginPath();
-        this.context.setLineDash([5, 5]);
-        this.context.lineWidth = 1;
-        this.context.strokeStyle = 'black';
-        this.context.rect(this.startCords.x, this.startCords.y, this.endCords.x - this.startCords.x, this.endCords.y - this.startCords.y);
-        this.context.stroke();
     }
 
     public save(): void {
@@ -132,5 +106,31 @@ export class EditSlideComponent implements AfterViewInit, OnDestroy {
                 console.log(this.rectangles[i].actionType);
             }
         }
+    }
+
+    private fillStyle(): void {
+        const background = new Image(1280, 720);
+        background.src = <string>this.buffer;
+
+        background.onload = () => {
+            this.context.drawImage(background, 0, 0, 1280, 1280 * background.height / background.width);
+        };
+    }
+
+    private getCursorPosition(event: MouseEvent): { x: number, y: number } {
+        const rect = this.canvasElement.nativeElement.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        return { x, y };
+    }
+
+    private drawRectangle(): void {
+        this.context.beginPath();
+        this.context.setLineDash([ 5, 5 ]);
+        this.context.lineWidth = 1;
+        this.context.strokeStyle = 'black';
+        this.context.rect(this.startCords.x, this.startCords.y, this.endCords.x - this.startCords.x, this.endCords.y - this.startCords.y);
+        this.context.stroke();
     }
 }

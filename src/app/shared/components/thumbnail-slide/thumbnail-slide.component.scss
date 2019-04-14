@@ -24,10 +24,12 @@ div {
     mat-icon {
         position: absolute;
         z-index: 1;
+
         &:first-of-type {
             top: 15px;
             right: -30px;
         }
+
         &:last-of-type {
             top: 45px;
             right: -30px;

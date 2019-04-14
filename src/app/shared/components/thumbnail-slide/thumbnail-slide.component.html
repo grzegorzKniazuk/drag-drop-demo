@@ -1,6 +1,6 @@
-<div draggable="true" (dragstart)="dragStart($event)" (dragenter)="dragEnter()">
+<div (dragenter)="dragEnter()" (dragstart)="dragStart($event)" draggable="true">
     <div class="id-in-column">{{ idInColumn }}</div>
-    <img [src]="buffer" [alt]="">
+    <img [alt]="" [src]="buffer">
     <mat-icon (click)="editSlide()">border_color</mat-icon>
     <mat-icon (click)="removeSlide()">clear</mat-icon>
 </div>

@@ -14,7 +14,7 @@ import {
 import { ThumbnailSlideComponent } from 'src/app/shared/components/thumbnail-slide/thumbnail-slide.component';
 import * as uuid from '../../../../../node_modules/uuid';
 import { ActionsService } from 'src/app/shared/services/actions.service';
-import { distinctUntilChanged, filter, take } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
@@ -27,10 +27,9 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 export class SectionComponent implements OnInit, OnDestroy {
 
     @ViewChild('thumbnailDropZone', { read: ViewContainerRef }) public thumbnailDropZone: ViewContainerRef;
-    @Input() private id = uuid();
     public columnID: number;
     public onRemoveSection$: EventEmitter<number> = new EventEmitter<number>();
-
+    @Input() private id = uuid();
     private thumbnailSlideComponentFactory: ComponentFactory<ThumbnailSlideComponent> = this.componentFactoryResolver.resolveComponentFactory(ThumbnailSlideComponent);
     private thumbnailSlideComponentRef: ComponentRef<ThumbnailSlideComponent>;
     private thumbnailSlideList: ThumbnailSlideComponent[] = [];
@@ -98,12 +97,20 @@ export class SectionComponent implements OnInit, OnDestroy {
         }
     }
 
+    public allowDrop(event: DragEvent): void {
+        event.preventDefault();
+    }
+
+    public removeSection(): void {
+        this.onRemoveSection$.emit(this.columnID);
+    }
+
     private sortElementsInColumn(): void {
         combineLatest(
             this.actionsService.onDragStart$,
             this.actionsService.onDragEnter$,
         ).pipe(
-            take(1)
+            take(1),
         ).subscribe(([ source, target ]: { slideID: string, idInColumn: number }[]) => {
             console.log(source.idInColumn);
             console.log(target.idInColumn);
@@ -124,13 +131,5 @@ export class SectionComponent implements OnInit, OnDestroy {
 
             this.thumbnailDropZone.move(componentToMove, target.idInColumn);
         });
-    }
-
-    public allowDrop(event: DragEvent): void {
-        event.preventDefault();
-    }
-
-    public removeSection(): void {
-        this.onRemoveSection$.emit(this.columnID);
     }
 }

@@ -3,6 +3,6 @@
     <ng-container #sectionContainer></ng-container>
 </div>
 <div>
-    <input type="file" (change)="uploadFile($event)" multiple>
+    <input (change)="uploadFile($event)" multiple type="file">
 </div>
-<button mat-raised-button color="primary" (click)="addSection()">Dodaj sekcję</button>
+<button (click)="addSection()" color="primary" mat-raised-button>Dodaj sekcję</button>

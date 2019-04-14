@@ -1,10 +1,9 @@
-
-<div class="column" (drop)="drop($event)" (dragover)="allowDrop($event)">
+<div (dragover)="allowDrop($event)" (drop)="drop($event)" class="column">
     <mat-form-field>
-        <input matInput type="text" placeholder="Nazwa sekcji">
+        <input matInput placeholder="Nazwa sekcji" type="text">
     </mat-form-field>
     <div class="thumnail-container">
         <ng-container #thumbnailDropZone></ng-container>
     </div>
 </div>
-<button mat-raised-button color="warn" (click)="removeSection()" *ngIf="columnID >= 0">Usuń sekcję</button>
+<button (click)="removeSection()" *ngIf="columnID >= 0" color="warn" mat-raised-button>Usuń sekcję</button>

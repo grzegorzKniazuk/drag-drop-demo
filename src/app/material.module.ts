@@ -15,7 +15,7 @@ import { MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule } fr
         MatInputModule,
         MatIconModule,
         MatButtonModule,
-    ]
+    ],
 })
 export class MaterialModule {
 }
