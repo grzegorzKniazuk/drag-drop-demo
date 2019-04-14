@@ -32,7 +32,7 @@ export class SectionComponent extends DashboardModel implements OnInit, AfterVie
     @ViewChild('thumbnailDropZone', { read: ViewContainerRef }) public thumbnailDropZone: ViewContainerRef;
     public columnID: number;
     public onRemoveSection$: EventEmitter<number> = new EventEmitter<number>();
-    private id = uuid();
+    public id = uuid();
     private thumbnailSlideComponentFactory: ComponentFactory<ThumbnailSlideComponent> = this.componentFactoryResolver.resolveComponentFactory(ThumbnailSlideComponent);
     private thumbnailSlideComponentRef: ComponentRef<ThumbnailSlideComponent>;
     private thumbnailSlideList: ThumbnailSlideComponent[] = [];
