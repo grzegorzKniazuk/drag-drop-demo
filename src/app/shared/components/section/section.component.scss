@@ -9,7 +9,14 @@
     margin-right: 15px;
 
     mat-form-field {
+        position: relative;
         width: 90%;
+
+        button {
+            position: absolute;
+            top: -30px;
+            right: -5px;
+        }
     }
 
     .thumnail-container {

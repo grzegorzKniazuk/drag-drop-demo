@@ -1,9 +1,11 @@
 <div (dragover)="allowDrop($event)" (drop)="drop($event)" class="column">
     <mat-form-field>
         <input matInput placeholder="Nazwa sekcji" type="text">
+        <button (click)="addSection($event)" color="primary" mat-fab mat-mini-fab><mat-icon>add</mat-icon></button>
     </mat-form-field>
     <div class="thumnail-container">
         <ng-container #thumbnailDropZone></ng-container>
     </div>
+    <app-upload-element-slide (onUpload$)="onUpload($event)" [columnID]="id"></app-upload-element-slide>
 </div>
-<button (click)="removeSection()" *ngIf="columnID >= 0" color="warn" mat-raised-button>Usuń sekcję</button>
+<button (click)="removeSection()" *ngIf="columnID" color="warn" mat-raised-button>Usuń sekcję</button>

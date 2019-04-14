@@ -18,7 +18,7 @@ div {
 
     img {
         @include size(225px);
-        margin-top: 15px;
+        margin-bottom: 15px;
     }
 
     mat-icon {
@@ -28,12 +28,12 @@ div {
         color: $white;
 
         &:first-of-type {
-            top: 20px;
+            top: 5px;
             right: 5px;
         }
 
         &:last-of-type {
-            top: 50px;
+            top: 35px;
             right: 5px;
         }
     }

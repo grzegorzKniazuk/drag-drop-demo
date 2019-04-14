@@ -11,4 +11,5 @@ export class ActionsService {
     public readonly onRemoveSlide$: BehaviorSubject<{ slideID: string, idInColumn: number }> = new BehaviorSubject<{ slideID: string, idInColumn: number }>(null);
     public readonly onEditSlide$: BehaviorSubject<{ slideID: string, buffer: string | ArrayBuffer }> = new BehaviorSubject<{ slideID: string, buffer: string | ArrayBuffer }>(null);
     public readonly onRealculateSlidesIDs$: BehaviorSubject<{ slideID: string, idInColumn: number }> = new BehaviorSubject<{ slideID: string, idInColumn: number }>(null);
+    public readonly onAddSection$: BehaviorSubject<{ columnID: number, onRemove: boolean }> = new BehaviorSubject<{ columnID: number, onRemove: boolean }>({ columnID: 0, onRemove: false });
 }

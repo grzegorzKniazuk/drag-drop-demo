@@ -1,0 +1,6 @@
+<div class="container" (click)="clickIntoLabel()">
+    <span>Upuść slajd z prezentacji</span>
+    <span>lub</span>
+    <input (change)="uploadFile($event)" multiple type="file" id="fileUpload">
+    <label #labelElement for="fileUpload">Kliknij, aby dodać pliki</label>
+</div>

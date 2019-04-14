@@ -1,4 +1,6 @@
 import {
+    AfterViewInit,
+    ChangeDetectorRef,
     Component,
     ComponentFactory,
     ComponentFactoryResolver,
@@ -17,6 +19,7 @@ import { ActionsService } from 'src/app/shared/services/actions.service';
 import { filter, take } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { DashboardModel } from 'src/app/modules/dashboard/dashboard.model';
 
 @AutoUnsubscribe()
 @Component({
@@ -24,20 +27,22 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
     templateUrl: './section.component.html',
     styleUrls: [ './section.component.scss' ],
 })
-export class SectionComponent implements OnInit, OnDestroy {
+export class SectionComponent extends DashboardModel implements OnInit, AfterViewInit, OnDestroy {
 
     @ViewChild('thumbnailDropZone', { read: ViewContainerRef }) public thumbnailDropZone: ViewContainerRef;
     public columnID: number;
     public onRemoveSection$: EventEmitter<number> = new EventEmitter<number>();
-    @Input() private id = uuid();
+    private id = uuid();
     private thumbnailSlideComponentFactory: ComponentFactory<ThumbnailSlideComponent> = this.componentFactoryResolver.resolveComponentFactory(ThumbnailSlideComponent);
     private thumbnailSlideComponentRef: ComponentRef<ThumbnailSlideComponent>;
     private thumbnailSlideList: ThumbnailSlideComponent[] = [];
 
     constructor(
-        private actionsService: ActionsService,
+        public actionsService: ActionsService,
         private componentFactoryResolver: ComponentFactoryResolver,
+        private changeDetectorRef: ChangeDetectorRef,
     ) {
+        super();
     }
 
     ngOnInit() {
@@ -70,6 +75,17 @@ export class SectionComponent implements OnInit, OnDestroy {
                 this.recalculateIdInColumnForElements();
             }
         });
+    }
+
+    public ngAfterViewInit(): void {
+        if (this.columnID === 0) {
+            this.insert({ id: uuid(), buffer: this.slide1 });
+            this.insert({ id: uuid(), buffer: this.slide2 });
+            this.insert({ id: uuid(), buffer: this.slide3 });
+            this.insert({ id: uuid(), buffer: this.slide4 });
+            this.insert({ id: uuid(), buffer: this.slide5 });
+            this.changeDetectorRef.detectChanges();
+        }
     }
 
     public ngOnDestroy(): void {
@@ -142,5 +158,16 @@ export class SectionComponent implements OnInit, OnDestroy {
             this.thumbnailDropZone.move(componentSourceViewRef, target.idInColumn);
             this.thumbnailDropZone.move(componentTargetViewRef, source.idInColumn);
         });
+    }
+
+    public addSection(event: MouseEvent): void {
+        event.stopPropagation();
+        this.actionsService.onAddSection$.next({ columnID: this.columnID + 1, onRemove: false });
+    }
+
+    public onUpload(data: { id: string, columnID: string, buffer: string | ArrayBuffer }): void {
+        if (this.id === data.columnID) {
+            this.insert({ id: data.id, buffer: data.buffer });
+        }
     }
 }

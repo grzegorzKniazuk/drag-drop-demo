@@ -1,5 +1,6 @@
 import { ComponentFactory, ComponentFactoryResolver, ComponentRef, Injectable, ViewContainerRef } from '@angular/core';
 import { SectionComponent } from 'src/app/shared/components/section/section.component';
+import { ActionsService } from 'src/app/shared/services/actions.service';
 
 @Injectable({
     providedIn: 'root',
@@ -10,6 +11,7 @@ export class SectionService {
     private sectionComponentRef: ComponentRef<SectionComponent>;
 
     constructor(
+        private actionsService: ActionsService,
         private componentFactoryResolver: ComponentFactoryResolver,
     ) {
     }

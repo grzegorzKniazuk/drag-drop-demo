@@ -1,55 +1,30 @@
-import { AfterViewInit, ChangeDetectorRef, Component, QueryList, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
-import { SectionService } from 'src/app/shared/services/section.service';
-import * as uuid from '../../../../node_modules/uuid';
-import { SectionComponent } from 'src/app/shared/components/section/section.component';
-import { DashboardModel } from 'src/app/modules/dashboard/dashboard.model';
+import { AfterViewInit, ChangeDetectorRef, Component, ViewChild, ViewContainerRef } from '@angular/core';
+import { SectionService } from 'src/app/shared/services/section.service';;
+import { ActionsService } from 'src/app/shared/services/actions.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
     styleUrls: [ './dashboard.component.scss' ],
 })
-export class DashboardComponent extends DashboardModel implements AfterViewInit {
+export class DashboardComponent implements AfterViewInit {
 
     @ViewChild('sectionContainer', { read: ViewContainerRef }) public sectionContainer: ViewContainerRef;
-    @ViewChildren(SectionComponent) private sectionList: QueryList<SectionComponent>;
 
     constructor(
         private sectionService: SectionService,
+        private actionsService: ActionsService,
         private changeDetectorRef: ChangeDetectorRef,
     ) {
-        super();
     }
 
     public ngAfterViewInit(): void {
-        this.sectionList.first.insert({ id: uuid(), buffer: this.slide1 });
-        this.sectionList.first.insert({ id: uuid(), buffer: this.slide2 });
-        this.sectionList.first.insert({ id: uuid(), buffer: this.slide3 });
-        this.sectionList.first.insert({ id: uuid(), buffer: this.slide4 });
-        this.sectionList.first.insert({ id: uuid(), buffer: this.slide5 });
+        this.actionsService.onAddSection$.pipe(
+            filter((data: { columnID: number, onRemove: boolean }) => !!data && !data.onRemove),
+        ).subscribe(() => {
+            this.sectionService.addSection(this.sectionContainer);
+        });
         this.changeDetectorRef.detectChanges();
-    }
-
-    public addSection(): void {
-        this.sectionService.addSection(this.sectionContainer);
-    }
-
-    public uploadFile(event: any): void {
-        const files: FileList = event.target.files || event.dataTransfer.files;
-
-        for (let i = 0; i < files.length; i++) {
-            if (files.item(i).type.match('image')) {
-                const fileReader = new FileReader();
-
-                fileReader.readAsDataURL(files.item(i));
-
-                fileReader.onloadend = () => {
-                    const imageBuffer = fileReader.result;
-                    this.sectionList.first.insert({ id: uuid(), buffer: imageBuffer });
-                };
-            } else {
-                alert('Wrzuć JPG/PNG');
-            }
-        }
     }
 }
