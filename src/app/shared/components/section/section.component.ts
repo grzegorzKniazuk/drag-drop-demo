@@ -14,7 +14,7 @@ import {
 import { ThumbnailSlideComponent } from 'src/app/shared/components/thumbnail-slide/thumbnail-slide.component';
 import * as uuid from '../../../../../node_modules/uuid';
 import { ActionsService } from 'src/app/shared/services/actions.service';
-import { distinctUntilChanged, filter } from 'rxjs/operators';
+import { distinctUntilChanged, filter, take } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
@@ -103,11 +103,10 @@ export class SectionComponent implements OnInit, OnDestroy {
             this.actionsService.onDragStart$,
             this.actionsService.onDragEnter$,
         ).pipe(
-            distinctUntilChanged(([ prevSource, prevTarget ]: { slideID: string, idInColumn: number }[], [ nextSource, nextTarget ]: { slideID: string, idInColumn: number }[]) => {
-                return prevTarget.idInColumn !== nextTarget.idInColumn;
-            }),
+            take(1)
         ).subscribe(([ source, target ]: { slideID: string, idInColumn: number }[]) => {
-            console.log(source.slideID);
+            console.log(source.idInColumn);
+            console.log(target.idInColumn);
             const componentToMove: ViewRef = this.thumbnailDropZone.get(source.idInColumn);
 
             const sourceIndexInArray = this.thumbnailSlideList.findIndex((component: ThumbnailSlideComponent) => {
