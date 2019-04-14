@@ -1,13 +1,16 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { ActionsService } from 'src/app/shared/services/actions.service';
 import { filter } from 'rxjs/operators';
+import { Rectangle } from 'src/app/shared/interfaces/rectangle';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
+@AutoUnsubscribe()
 @Component({
     selector: 'app-edit-slide',
     templateUrl: './edit-slide.component.html',
     styleUrls: [ './edit-slide.component.scss' ],
 })
-export class EditSlideComponent implements AfterViewInit {
+export class EditSlideComponent implements AfterViewInit, OnDestroy {
 
     @ViewChild('canvasElement') private canvasElement: ElementRef;
     private context: CanvasRenderingContext2D;
@@ -15,47 +18,11 @@ export class EditSlideComponent implements AfterViewInit {
     public buffer: string | ArrayBuffer;
     private startCords: { x: number, y: number };
     private endCords: { x: number, y: number };
-    private readonly rectangles: {
-        actionType: string;
-        topLeft: {
-            x: number;
-            y: number;
-        },
-        topRight: {
-            x: number;
-            y: number;
-        },
-        bottomLeft: {
-            x: number;
-            y: number;
-        },
-        bottomRight: {
-            x: number;
-            y: number;
-        },
-    }[] = [];
+    private readonly rectangles: Rectangle[] = [];
 
     private canvasComponent: {
         data: string;
-        rectangles: {
-            actionType: string;
-            topLeft: {
-                x: number;
-                y: number;
-            },
-            topRight: {
-                x: number;
-                y: number;
-            },
-            bottomLeft: {
-                x: number;
-                y: number;
-            },
-            bottomRight: {
-                x: number;
-                y: number;
-            },
-        }[],
+        rectangles: Rectangle[],
     };
 
     constructor(
@@ -72,6 +39,9 @@ export class EditSlideComponent implements AfterViewInit {
             this.buffer = buffer;
             this.fillStyle();
         });
+    }
+
+    ngOnDestroy() {
     }
 
     private fillStyle(): void {
