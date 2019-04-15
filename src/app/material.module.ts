@@ -7,6 +7,10 @@ import { MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule } fr
     imports: [
         BrowserAnimationsModule,
         DragDropModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatIconModule,
+        MatButtonModule,
     ],
     exports: [
         BrowserAnimationsModule,
